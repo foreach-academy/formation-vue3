@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue@3"></script>
+  <nav>Home - item 1</nav>
+  <div id="app">
+    <span>{{ message }}</span>
+    <br />
+    <div>
+      {{ items }}
+      <br>
+      <li v-for="item in items" >
+        {{ item.name }}
+      </li>
+    </div>
+    <br />
+    <input type="text" v-model="prenom" :placeholder="placeholder">
+    <br />
+    <button @click="sayHello">Valider</button>
+    <br>
+    {{ concatName }}
+  </div>
+  <footer>test</footer>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          placeholder: 'Taper un prenom',
+          message: 'Hello World !!!!',
+          prenom: '',
+          items: [{name:'test'}, {name:'test 1'}, {name:'test 2'}]
+        }
+      },
+      methods: {
+        sayHello( ) {
+          this.message = 'Hello ' + this.prenom + '!!'
+          this.items.push({name: 'push'})
+        }
+      },
+      computed: {
+        concatName() {          
+          return this.items.map(x => x.name).join('***')
+        }
+      }
+    }).mount('#app')
+
+  </script>
+</body>
+</html>
