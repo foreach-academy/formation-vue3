@@ -30,8 +30,7 @@
 
   <script>
     const { createApp } = Vue
-
-    createApp({
+    let app = {
       data() {
         return {
           placeholder: 'Taper un prenom',
@@ -51,7 +50,9 @@
           return this.items.map(x => x.name).join('***')
         }
       }
-    }).mount('#app')
+    }
+    
+    createApp(app).mount('#app')
 
   </script>
 </body>

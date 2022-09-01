@@ -30,14 +30,47 @@
       <input type="number" v-model="nbAjout">
       <button @click="ajouterProduits">Ajouter {{ nbAjout }} {{ plurielProduit }}</button>
     </div>
-    <div>
-      <h2>Montant total: {{ montantDuPanier }}</h2>
-    </div>
+    <montant-total :montant="montantDuPanier"></montant-total>
+    <mon-composant>
+      <h2>Mon message</h2>
+    </mon-composant>
   </div>
   <script>
     let { createApp } = Vue
     
+    let composantTotal = {
+      template: `
+      <div>
+        <h2>Montant total: {{ montant }}</h2>
+      </div>
+      `,
+      props: {
+        montant: Number,
+      }
+    }
+    let monComposant = {
+      template:`
+      <slot/>
+      <div>
+        {{ message }}
+      </div>
+      `
+      ,
+      data() {
+        return {
+          message: 'Bonjour !'
+        }
+      },
+      mounted() {
+        console.log(this.message)
+      }
+    }
+
     let app = {
+      components: {
+        'mon-composant': monComposant,
+        'montant-total': composantTotal
+      },
       data() {
         return {
           panier: [{
