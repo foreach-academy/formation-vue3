@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3"></script>
+  <title>Panier</title>
+</head>
+<body>
+  <div id="app">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Prix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="produit in panier" :key="produit.id">
+          <td>{{ produit.id }}</td>
+          <td>{{ produit.nom }}</td>
+          <td>{{ produit.prix }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <input type="number" v-model="nbAjout">
+      <button @click="ajouterProduits">Ajouter {{ nbAjout }} {{ plurielProduit }}</button>
+    </div>
+    <div>
+      <h2>Montant total: {{ montantDuPanier }}</h2>
+    </div>
+  </div>
+  <script>
+    let { createApp } = Vue
+    
+    let app = {
+      data() {
+        return {
+          panier: [{
+            id: 1,
+            nom: 'produit 1',
+            prix: 30,
+          }],
+          nbAjout: 1,
+        }
+      },
+      methods: {
+        ajouterProduits() {
+          for(let i=0; i<this.nbAjout; i++) {
+            let id = Math.floor(Math.random() * (9999999999 + 1 - 0) + 0);
+            this.panier.push({
+              id: id,
+              nom: 'produit ' + id,
+              prix: 30,
+            })
+          }
+        }
+
+      },
+      computed: {
+        plurielProduit() {
+          if (this.nbAjout > 1) {
+            return 'produits'
+          }
+          return 'produit'
+        },
+        montantDuPanier() {
+          return this.panier.map(p => p.prix).reduce((a,b)=> a+b,0)
+        }
+      }
+    }
+
+    createApp(app).mount('#app')
+  </script>
+</body>
+</html>
