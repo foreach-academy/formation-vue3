@@ -1,15 +1,23 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
+import MonComposant from './components/MonComposant.vue'
 import TheWelcome from './components/TheWelcome.vue'
+
+let message = ref('test-ici')
+
+
 </script>
 
 <template>
   <header>
+    <h1> un autre titre</h1>
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="Hello !!!" />
+      <HelloWorld :msg="message" />
     </div>
+    <mon-composant titre="Mon titre"></mon-composant>
   </header>
 
   <main>
