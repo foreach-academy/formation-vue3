@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <button-temperature @label-change="doLabelChange" @temp-change="doTempChange" :value="plusLabel"></button-temperature>
+    <div>{{ temperature }}</div>
+    <button-temperature @temp-change="doTempChange" :value="minusLabel"></button-temperature>
+  </div>
+  <script>
+    let { createApp } = Vue
+
+    let buttonTemperature = {
+      template:'<button @click="doAction">{{ value }}</button>',
+      props: ['value'],
+      methods: {
+        doAction() {
+          this.$emit('temp-change', '+')
+          this.$emit('label-change', 'un nouveau label')
+        }
+      }
+    }
+    
+    let app = {
+      components: {
+        buttonTemperature
+      },
+      data() {
+        return {
+          plusLabel: '+',
+          minusLabel: '-',
+          temperature: 21,
+        }
+      },
+      methods: {
+        doTempChange(value){
+          if(value === '+') {  
+            this.temperature += 1
+            return
+          } else if (value === '-') {
+            this.temperature -=1
+          }
+        },
+        doLabelChange(value){
+          this.plusLabel = value
+        }
+      },
+      computed: {
+        
+      }
+    }
+
+    createApp(app).mount('#app')
+  </script>
+</body>
+</html>

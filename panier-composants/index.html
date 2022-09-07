@@ -18,11 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="produit in panier" :key="produit.id">
-          <td>{{ produit.id }}</td>
-          <td>{{ produit.nom }}</td>
-          <td>{{ produit.prix }}</td>
-        </tr>
+        <tr is="vue:ligne-produit" :produit="produit" v-for="produit in panier" :key="produit.id"></ligne-produit>
       </tbody>
     </table>
 
@@ -38,6 +34,17 @@
   <script>
     let { createApp } = Vue
     
+    let ligneProduit = {
+      template: `
+        <tr>
+          <td>{{ produit.id }}</td>
+          <td>{{ produit.nom }}</td>
+          <td>{{ produit.prix }}</td>
+        </tr>
+      `,
+      props: ["produit"]
+    }
+
     let composantTotal = {
       template: `
       <div>
@@ -45,9 +52,13 @@
       </div>
       `,
       props: {
-        montant: Number,
+        montant: {
+          type: Number,
+          required: true
+        }
       }
     }
+
     let monComposant = {
       template:`
       <slot/>
@@ -69,7 +80,8 @@
     let app = {
       components: {
         'mon-composant': monComposant,
-        'montant-total': composantTotal
+        'montant-total': composantTotal,
+        'ligne-produit': ligneProduit
       },
       data() {
         return {
