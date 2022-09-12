@@ -4,36 +4,48 @@
   </header>
   <main>
       <vp-catalogue :catalogue="catalogue" @ajouter-au-panier="doAjouterAuPanier"></vp-catalogue>
-      <vp-panier :panier="panier"></vp-panier>
+      <vp-panier :panier="panier" @supprimer-du-panier="doSupprimerDuPanier"></vp-panier>
   </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { chercherDansCatalogueParIdProduit, type Catalogue } from '@/api/catalogue/catalogue'
+import { chercherDansCatalogueParIdProduit, modifierStock, type Catalogue } from '@/api/catalogue/catalogue'
 
-import { defaultCatalogue } from '@/api/catalogue/catalogue'
+import { chargeLeCatalogue } from '@/api/catalogue/catalogue'
 import VPCatalogue from '@/components/catalogue/Catalogue.vue'
 import VPPanier from '@/components/panier/Panier.vue'
-import { ajouterAuPanier, type Panier } from '@/api/panier/panier'
+import { supprimerDuPanier, ajouterAuPanier, type Panier, type ProduitPanier } from '@/api/panier/panier'
 
-let catalogue: Catalogue = defaultCatalogue
+
 let panier: Panier = []
 
 export default defineComponent({
     data() {
         return {
-            catalogue: catalogue,
+            catalogue: [],
             panier: panier
         };
     },
+    async mounted() {
+      let response = await chargeLeCatalogue()
+      this.catalogue = await response.json();
+    },
     methods: {
       doAjouterAuPanier(id: number) {
-        let produit = chercherDansCatalogueParIdProduit(this.catalogue,id);
-        if(produit) {
-          ajouterAuPanier(this.panier, produit)  
+        let pc = chercherDansCatalogueParIdProduit(this.catalogue,id);
+        if(pc) {
+          modifierStock(this.catalogue, pc.produit.id, pc.stock - 1)
+          ajouterAuPanier(this.panier, pc.produit)  
         }
-      }
+      },
+      doSupprimerDuPanier(pp: ProduitPanier) {
+        let pc = chercherDansCatalogueParIdProduit(this.catalogue,pp.produit.id);
+        if(pc) {
+          modifierStock(this.catalogue, pp.produit.id, pc.stock + pp.quantite)
+          supprimerDuPanier(this.panier, pp)
+        }
+      } 
     },
     components: { 
       "vp-catalogue": VPCatalogue,

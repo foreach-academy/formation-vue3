@@ -1,0 +1,20 @@
+[
+  {
+    "produit": {
+      "id": 1,
+      "nom": "test",
+      "description": "un produit de test",
+      "photo": "http://placekitten.com/150"
+    },
+    "stock": 10
+  },
+  {
+    "produit": {
+      "id": 2,
+      "nom": "test 2",
+      "description": "un produit de test",
+      "photo": "http://placekitten.com/150"
+    },
+    "stock": 10
+  }
+]
